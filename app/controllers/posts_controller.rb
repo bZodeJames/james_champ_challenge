@@ -21,11 +21,15 @@ class PostsController < ApplicationController
   def edit
   end
 
+  def factorial
+    n = (1..10).to_a.sample
+    (1..n).inject(:*)
+  end
   # POST /posts
   # POST /posts.json
   def create
     @post = Post.new(post_params)
-
+    set_factorial
     respond_to do |format|
       if @post.save
         format.html { redirect_to @post, notice: 'Post was successfully created.' }
@@ -37,9 +41,14 @@ class PostsController < ApplicationController
     end
   end
 
+  def set_factorial
+    @post.update(factorial: factorial)
+  end
+
   # PATCH/PUT /posts/1
   # PATCH/PUT /posts/1.json
   def update
+    set_factorial
     respond_to do |format|
       if @post.update(post_params)
         format.html { redirect_to @post, notice: 'Post was successfully updated.' }
@@ -61,6 +70,8 @@ class PostsController < ApplicationController
     end
   end
 
+
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_post
@@ -69,6 +80,6 @@ class PostsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def post_params
-      params.require(:post).permit(:title, :body, :published)
+      params.require(:post).permit(:title, :body, :published, :factorial)
     end
 end
